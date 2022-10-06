@@ -1,8 +1,9 @@
 "Plugins
 "-------
 call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
-Plug 'joshdick/onedark.vim' "theme
-Plug 'sainnhe/sonokai' "theme
+Plug 'navarasu/onedark.nvim'
+Plug 'sainnhe/gruvbox-material'
+Plug 'sainnhe/edge'
 Plug 'shaunsingh/nord.nvim' "theme
 Plug 'tpope/vim-rails' "rails support
 Plug 'tpope/vim-fugitive' "GitHub support
@@ -30,6 +31,8 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'lukas-reineke/indent-blankline.nvim'
+Plug 'nvim-lualine/lualine.nvim' " Status line
 call plug#end()
 
 "Look
@@ -130,8 +133,8 @@ map <leader>[ <ESC>a#{}<ESC>i
 map <leader>as <ESC>a class=""<ESC>i
 map <leader>st <ESC>a style=""<ESC>i
 "Quickfix shortcuts
-"map <leader>qf <ESC>:copen<CR>
-"map <leader>qx <ESC>:ccl<CR>
+map <leader>co <ESC>:copen<CR>
+map <leader>cl <ESC>:ccl<CR>
 "Nvimtree stuff
 nnoremap <leader><TAB> :NvimTreeToggle<CR>
 nnoremap <leader>r :NvimTreeRefresh<CR>
@@ -153,39 +156,54 @@ nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
 
 "Status line
 "-----------
-function! GitBranch()
-  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
-endfunction
-function! StatuslineGit()
-  let l:branchname = GitBranch()
-  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
-endfunction
-function! GitStatus()
-  let [a,m,r] = GitGutterGetHunkSummary()
-  return printf('+%d ~%d -%d', a, m, r)
-endfunction
-set statusline=
-set statusline+=%#PmenuSel#
-set statusline+=%{StatuslineGit()}
-set statusline+=%{GitStatus()}
-set statusline+=%#LineNr#
-set statusline+=\ %f
-set statusline+=%m\
-set statusline+=%=
-set statusline+=%#CursorColumn#
-set statusline+=\ %y
-set statusline+=\[%{&fileformat}\]
-set statusline+=\ %p%%
-set statusline+=\ %l:%c
-set statusline+=\ 
+" function! GitBranch()
+"   return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+" endfunction
+" function! StatuslineGit()
+"   let l:branchname = GitBranch()
+"   return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+" endfunction
+" function! GitStatus()
+"   let [a,m,r] = GitGutterGetHunkSummary()
+"   return printf('+%d ~%d -%d', a, m, r)
+" endfunction
+" set statusline=
+" set statusline+=%#PmenuSel#
+" set statusline+=%{StatuslineGit()}
+" set statusline+=%{GitStatus()}
+" set statusline+=%#LineNr#
+" set statusline+=\ %f
+" set statusline+=%m\
+" set statusline+=%=
+" set statusline+=%#CursorColumn#
+" set statusline+=\ %y
+" set statusline+=\[%{&fileformat}\]
+" set statusline+=\ %p%%
+" set statusline+=\ %l:%c
+" set statusline+=\ 
 "-------------
 
 lua << EOF
+require('lualine').setup{
+  options = { theme = 'nord' },
+  sections = {
+      lualine_a = {'mode'},
+      lualine_b = {'branch', 'diff', 'diagnostics'},
+      lualine_c = { {'filename', path = 1} },
+      lualine_x = {'fileformat', 'filetype'},
+      lualine_y = {'progress'},
+      lualine_z = {'location'}
+    },
+  disabled_filetypes = { 'Plug', 'NVimTree' }
+}
+
 require'nvim-tree'.setup {
     update_focused_file = { enable = true },
     view = { width = 40 },
-    actions = { open_file = { quit_on_open = true } }
+    actions = { open_file = { quit_on_open = true } },
+    renderer = { indent_markers = { enable = true } }
   }
+
 require("bufferline").setup{
   options = {
     offsets = {{filetype = "NvimTree", text = "File Explorer", highlight = "Directory", text_align = "left"}},
@@ -193,10 +211,12 @@ require("bufferline").setup{
     show_close_icon = false,
   }
 }
+
 require'nvim-treesitter.configs'.setup {
-    ensure_installed = { "ruby", "javascript", "html", "css" },
+    ensure_installed = { "ruby", "javascript", "python", "html", "css" },
     auto_install = true
   }
+
 local actions = require('telescope.actions')
 require'telescope'.setup {
   defaults = {
@@ -207,7 +227,14 @@ require'telescope'.setup {
     },
   }
 }
+
 require('telescope').load_extension('fzy_native')
+
+require("indent_blankline").setup {
+    show_current_context = true,
+    show_current_context_start = true,
+}
 EOF
+
 luafile ~/.config/nvim/lua/lsp_config.lua
 
