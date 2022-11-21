@@ -33,6 +33,7 @@ Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'nvim-lualine/lualine.nvim' " Status line
+Plug 'maxmellon/vim-jsx-pretty' " jsx syntax stuff
 call plug#end()
 
 "Look
@@ -57,6 +58,7 @@ set noswapfile
 
 "Misc
 "----
+set history=1000
 set updatetime=100
 set signcolumn=yes
 set ignorecase
@@ -65,6 +67,7 @@ let g:ruby_host_prog = 'rvm system do neovim-ruby-host'
 set spelllang=en_gb
 set spell
 cabbrev ec Econtroller
+cabbrev em Emigration
 runtime macros/matchit.vim
 set nocompatible
 if has("autocmd")
@@ -135,6 +138,8 @@ map <leader>st <ESC>a style=""<ESC>i
 "Quickfix shortcuts
 map <leader>co <ESC>:copen<CR>
 map <leader>cl <ESC>:ccl<CR>
+"Notes
+map <leader>nn <ESC>:vsplit ~/notes/readme.md<CR>
 "Nvimtree stuff
 nnoremap <leader><TAB> :NvimTreeToggle<CR>
 nnoremap <leader>r :NvimTreeRefresh<CR>
@@ -199,7 +204,7 @@ require('lualine').setup{
 
 require'nvim-tree'.setup {
     update_focused_file = { enable = true },
-    view = { width = 40 },
+    view = { width = 60 },
     actions = { open_file = { quit_on_open = true } },
     renderer = { indent_markers = { enable = true } }
   }
