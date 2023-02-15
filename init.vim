@@ -10,6 +10,7 @@ Plug 'tpope/vim-fugitive' "GitHub support
 Plug 'tpope/vim-surround' "vim operations on surrounding chars
 Plug 'tpope/vim-repeat' "dot command works with plugins
 Plug 'tpope/vim-commentary' "comment in/out mappings
+Plug 'tpope/vim-abolish'
 Plug 'kana/vim-textobj-user' "block support for ruby (also below)
 Plug 'nelstrom/vim-textobj-rubyblock'
 Plug '907th/vim-auto-save' 
@@ -34,6 +35,7 @@ Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'nvim-lualine/lualine.nvim' " Status line
 Plug 'maxmellon/vim-jsx-pretty' " jsx syntax stuff
+Plug 'norcalli/nvim-colorizer.lua' " hex code colours
 call plug#end()
 
 "Look
@@ -48,6 +50,7 @@ filetype on
 autocmd Filetype c setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 set termguicolors
 colorscheme nord
+set rnu
 
 "Saving
 "------
@@ -80,75 +83,89 @@ let g:ackprg = 'ag --nogroup --nocolor --column'
 
 "Mappings
 "--------
-"" Leader == space
+
+" Leader == space
 nnoremap <SPACE> <Nop>
 let mapleader=" "
-"Disable arrow keys
-noremap <Up> <NOP>
-inoremap <Up> <NOP>
-vnoremap <Up> <NOP>
-noremap <Down> <NOP>
-inoremap <Down> <NOP>
-vnoremap <Down> <NOP>
-noremap <Left> <NOP>
-inoremap <Left> <NOP>
-vnoremap <Left> <NOP>
-noremap <Right> <NOP>
-inoremap <Right> <NOP>
-vnoremap <Right> <NOP>
+
 "Buffer stuff
 map <leader>x :bd<CR>
 map <leader>vs :vspl #<CR>
 map <C-L> :bnext<CR>
 map <C-H> :bprev<CR>
 map <leader>b :ls<CR>:b<Space>
+
 "Close all buffers except current
 command BufOnly silent! execute "%bd|e#|bd#"
 nnoremap <leader>o :BufOnly<CR>
+
 "Remove highlight
 map <leader>h :noh<CR>
+
 "Move 1 more lines up or down in normal and visual selection modes
 nnoremap K :m .-2<CR>==
 nnoremap J :m .+1<CR>==
 vnoremap K :m '<-2<CR>gv=gv
 vnoremap J :m '>+1<CR>gv=gv
+
 "console.log variable under cursor
 map <leader>lo <ESC>yiwoconsole.log();<ESC>hhp<ESC>
+
 "Yank selection to system clipboard
 noremap <leader>y "*y
+
 "Yank inner word to system clipboard
 noremap <leader>t viw"*y
+
 "Yank current file path to system clipboard
 noremap <leader>py :let @* = expand("%")<cr>
+
 " Ruby stuff
 " ERB tags
 map <leader>pe <ESC>a<%=  %><ESC>3hli
 map <leader>er <ESC>a<%  %><ESC>3hli
+
 "Rails raise
 map <leader>ra <ESC>iraise .inspect<ESC>2bi
+
 "New Ruby method
 map <leader>de <ESC>i<TAB>def<CR>end<ESC>kA<SPACE>
+
 "Do End loop
 map <leader>do <ESC>A<SPACE>do<CR>end<ESC>kA<SPACE>\|\|<ESC>i
+
 "Ruby interpolation
 map <leader>[ <ESC>a#{}<ESC>i
+
+"map(&:)
+map <leader>& <ESC>A.map(&:)<ESC>$i
+
 "Inline class/style
 map <leader>as <ESC>a class=""<ESC>i
 map <leader>st <ESC>a style=""<ESC>i
+
 "Quickfix shortcuts
 map <leader>co <ESC>:copen<CR>
 map <leader>cl <ESC>:ccl<CR>
+
 "Notes
 map <leader>nn <ESC>:vsplit ~/notes/readme.md<CR>
+
+"Config
+map <leader>ec <ESC>:vsplit ~/.config/nvim/init.vim<CR>
+map <leader>es <ESC>:so ~/.config/nvim/init.vim<CR>
+
 "Nvimtree stuff
 nnoremap <leader><TAB> :NvimTreeToggle<CR>
 nnoremap <leader>r :NvimTreeRefresh<CR>
+
 "Telescope
 nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
 nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
+
 "LSP
 " nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
 " nnoremap <silent> gD <cmd>lua vim.lsp.buf.declaration()<CR>
@@ -189,6 +206,7 @@ nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
 "-------------
 
 lua << EOF
+require'colorizer'.setup()
 require('lualine').setup{
   options = { theme = 'nord' },
   sections = {
@@ -204,7 +222,7 @@ require('lualine').setup{
 
 require'nvim-tree'.setup {
     update_focused_file = { enable = true },
-    view = { width = 60 },
+    view = { width = 60, side = 'right' },
     actions = { open_file = { quit_on_open = true } },
     renderer = { indent_markers = { enable = true } }
   }
