@@ -4,7 +4,7 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 Plug 'navarasu/onedark.nvim'
 Plug 'sainnhe/gruvbox-material'
 Plug 'sainnhe/edge'
-Plug 'shaunsingh/nord.nvim' "theme
+Plug 'shaunsingh/nord.nvim'
 Plug 'tpope/vim-rails' "rails support
 Plug 'tpope/vim-fugitive' "GitHub support
 Plug 'tpope/vim-surround' "vim operations on surrounding chars
@@ -32,7 +32,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
-Plug 'lukas-reineke/indent-blankline.nvim'
+" Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'nvim-lualine/lualine.nvim' " Status line
 Plug 'maxmellon/vim-jsx-pretty' " jsx syntax stuff
 Plug 'norcalli/nvim-colorizer.lua' " hex code colours
@@ -205,6 +205,9 @@ nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
 " set statusline+=\ 
 "-------------
 
+let g:vsnip_filetypes = {}
+let g:vsnip_filetypes.ruby = ['rails']
+
 lua << EOF
 require'colorizer'.setup()
 require('lualine').setup{
@@ -253,10 +256,10 @@ require'telescope'.setup {
 
 require('telescope').load_extension('fzy_native')
 
-require("indent_blankline").setup {
-    show_current_context = true,
-    show_current_context_start = true,
-}
+-- require("indent_blankline").setup {
+    -- show_current_context = true,
+    -- show_current_context_start = true,
+-- }
 EOF
 
 luafile ~/.config/nvim/lua/lsp_config.lua

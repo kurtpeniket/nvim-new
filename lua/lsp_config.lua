@@ -122,3 +122,4 @@ cmp.setup.filetype('gitcommit', {
       { name = 'cmdline' }
     })
   })
+
