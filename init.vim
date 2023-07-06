@@ -4,6 +4,7 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 Plug 'navarasu/onedark.nvim'
 Plug 'sainnhe/gruvbox-material'
 Plug 'sainnhe/edge'
+Plug 'sainnhe/sonokai'
 Plug 'shaunsingh/nord.nvim'
 Plug 'tpope/vim-rails' "rails support
 Plug 'tpope/vim-fugitive' "GitHub support
@@ -36,6 +37,8 @@ Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'nvim-lualine/lualine.nvim' " Status line
 Plug 'maxmellon/vim-jsx-pretty' " jsx syntax stuff
 Plug 'norcalli/nvim-colorizer.lua' " hex code colours
+Plug 'jackMort/ChatGPT.nvim'
+Plug 'MunifTanjim/nui.nvim'
 call plug#end()
 
 "Look
@@ -49,8 +52,9 @@ set shiftwidth=2
 filetype on
 autocmd Filetype c setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 set termguicolors
+" let g:sonokai_style = 'atlantis'
 colorscheme nord
-set rnu
+" set rnu
 
 "Saving
 "------
@@ -83,10 +87,15 @@ let g:ackprg = 'ag --nogroup --nocolor --column'
 
 "Mappings
 "--------
-
 " Leader == space
 nnoremap <SPACE> <Nop>
 let mapleader=" "
+
+" Copilot
+" map <leader>cp :Copilot panel<CR>
+
+" Copy contents of file to system clipboard
+nnoremap <leader>fy gg"+yG
 
 "Buffer stuff
 map <leader>x :bd<CR>
@@ -137,12 +146,18 @@ map <leader>do <ESC>A<SPACE>do<CR>end<ESC>kA<SPACE>\|\|<ESC>i
 "Ruby interpolation
 map <leader>[ <ESC>a#{}<ESC>i
 
+"JS interpolation
+map <leader>4 <ESC>a${}<ESC>i
+
 "map(&:)
 map <leader>& <ESC>A.map(&:)<ESC>$i
 
 "Inline class/style
 map <leader>as <ESC>a class=""<ESC>i
 map <leader>st <ESC>a style=""<ESC>i
+
+"React export
+map <leader>ex <ESC>yiwGoexport default ;<ESC>hp
 
 "Quickfix shortcuts
 map <leader>co <ESC>:copen<CR>
@@ -207,6 +222,8 @@ nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
 
 let g:vsnip_filetypes = {}
 let g:vsnip_filetypes.ruby = ['rails']
+let g:vsnip_filetypes.javascriptreact = ['javascript']
+let g:vsnip_filetypes.typescriptreact = ['typescript']
 
 lua << EOF
 require'colorizer'.setup()
@@ -234,7 +251,7 @@ require("bufferline").setup{
   options = {
     offsets = {{filetype = "NvimTree", text = "File Explorer", highlight = "Directory", text_align = "left"}},
     numbers = 'buffer_id',
-    show_close_icon = false,
+    show_buffer_close_icons = false
   }
 }
 
@@ -262,5 +279,6 @@ require('telescope').load_extension('fzy_native')
 -- }
 EOF
 
+lua require('chatgpt').setup()
 luafile ~/.config/nvim/lua/lsp_config.lua
 
