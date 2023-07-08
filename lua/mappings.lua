@@ -1,0 +1,87 @@
+-- Copy contents of file to system clipboard
+vim.api.nvim_set_keymap('n', '<leader>fy', 'gg"+yG', {noremap = true})
+
+-- Buffer stuff
+vim.api.nvim_set_keymap('n', '<leader>x', ':bd<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>vs', ':vspl #<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<C-L>', ':bnext<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<C-H>', ':bprev<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>b', ':ls<CR>:b<Space>', {noremap = true})
+
+-- Close all buffers except current
+vim.cmd([[command! BufOnly silent! execute "%bd|e#|bd#"]])
+vim.api.nvim_set_keymap('n', '<leader>o', ':BufOnly<CR>', {noremap = true})
+
+-- Remove highlight
+vim.api.nvim_set_keymap('n', '<leader>h', ':noh<CR>', {noremap = true})
+
+-- Move 1 more lines up or down in normal and visual selection modes
+vim.api.nvim_set_keymap('n', 'K', ':m .-2<CR>==', {noremap = true})
+vim.api.nvim_set_keymap('n', 'J', ':m .+1<CR>==', {noremap = true})
+vim.api.nvim_set_keymap('v', 'K', ":m '<-2<CR>gv=gv", {noremap = true})
+vim.api.nvim_set_keymap('v', 'J', ":m '>+1<CR>gv=gv", {noremap = true})
+
+-- console.log variable under cursor
+vim.api.nvim_set_keymap('n', '<leader>lo', '<ESC>yiwoconsole.log();<ESC>hhp<ESC>', {noremap = true})
+
+-- Yank selection to system clipboard
+vim.api.nvim_set_keymap('v', '<leader>y', '"*y', {noremap = true})
+
+-- Yank inner word to system clipboard
+vim.api.nvim_set_keymap('n', '<leader>t', 'viw"*y', {noremap = true})
+
+-- Yank current file path to system clipboard
+vim.api.nvim_set_keymap('n', '<leader>py', ':let @* = expand("%")<cr>', {noremap = true})
+
+-- Ruby stuff
+-- ERB tags
+vim.api.nvim_set_keymap('n', '<leader>pe', '<ESC>a<%=  %><ESC>3hli', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>er', '<ESC>a<%  %><ESC>3hli', {noremap = true})
+
+-- Rails raise
+vim.api.nvim_set_keymap('n', '<leader>ra', '<ESC>iraise .inspect<ESC>2bi', {noremap = true})
+
+-- New Ruby method
+vim.api.nvim_set_keymap('n', '<leader>de', '<ESC>i<TAB>def<CR>end<ESC>kA<SPACE>', {noremap = true})
+
+-- do end loop
+vim.api.nvim_set_keymap('n', '<leader>do', '<ESC>A<SPACE>do<CR>end<ESC>kA<SPACE>\\|\\|<ESC>i', {noremap = true})
+
+-- Ruby interpolation
+vim.api.nvim_set_keymap('n', '<leader>[', '<ESC>a#{}<ESC>i', {noremap = true})
+
+-- JS interpolation
+vim.api.nvim_set_keymap('n', '<leader>4', '<ESC>a${}<ESC>i', {noremap = true})
+
+-- map(&:)
+vim.api.nvim_set_keymap('n', '<leader>&', '<ESC>A.map(&:)<ESC>$i', {noremap = true})
+
+-- Inline class/style
+vim.api.nvim_set_keymap('n', '<leader>as', '<ESC>a class=""<ESC>i', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>st', '<ESC>a style=""<ESC>i', {noremap = true})
+
+-- Quickfix shortcuts
+vim.api.nvim_set_keymap('n', '<leader>co', '<ESC>:copen<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>cl', '<ESC>:ccl<CR>', {noremap = true})
+
+-- Notes
+vim.api.nvim_set_keymap('n', '<leader>nn', '<ESC>:vsplit ~/notes/readme.md<CR>', {noremap = true})
+
+-- Config
+vim.api.nvim_set_keymap('n', '<leader>ec', '<ESC>:vsplit ~/.config/nvim/init.lua<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>es', '<ESC>:so ~/.config/nvim/init.lua<CR>', {noremap = true})
+
+-- Abbreviations
+vim.cmd 'cabbrev ec Econtroller'
+vim.cmd 'cabbrev em Emigration'
+
+-- Nvimtree stuff
+vim.api.nvim_set_keymap('n', '<leader><TAB>', ':NvimTreeToggle<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>r', ':NvimTreeRefresh<CR>', {noremap = true})
+
+-- Telescope
+vim.api.nvim_set_keymap('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>fs', "<cmd>lua require('telescope.builtin').grep_string()<cr>", {noremap = true})
