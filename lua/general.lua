@@ -1,5 +1,5 @@
 -- Look
-vim.wo.number = true
+vim.o.number = true
 vim.o.sidescroll = 1
 vim.o.mouse = 'n'
 vim.wo.wrap = false
@@ -9,13 +9,8 @@ vim.cmd 'filetype on'
 vim.o.termguicolors = true
 vim.cmd 'colorscheme nord'
 
--- Saving
-vim.g.auto_save = 1
-vim.g.auto_save_in_insert_mode = 0
-vim.g.auto_save_silent = 1
-vim.o.swapfile = false
-
 -- Misc
+vim.o.swapfile = false
 vim.o.history = 1000
 vim.o.updatetime = 100
 vim.wo.signcolumn = 'yes'

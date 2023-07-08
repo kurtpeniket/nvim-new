@@ -1,16 +1,23 @@
 return {
-  {'shaunsingh/nord.nvim'},
+  {'shaunsingh/nord.nvim', lazy = false, priority = 1000},
   {'tpope/vim-rails'},
   {'tpope/vim-fugitive'},
   {'tpope/vim-surround'},
   {'tpope/vim-repeat'},
   {'tpope/vim-commentary'},
   {'tpope/vim-abolish'},
-  {'kana/vim-textobj-user'},
-  {'nelstrom/vim-textobj-rubyblock'},
-  {'907th/vim-auto-save'},
+  {'kana/vim-textobj-user', lazy = false, priority = 900},
+  {'nelstrom/vim-textobj-rubyblock', lazy = false},
   {'tmsvg/pear-tree'},
   {'nvim-lua/plenary.nvim'},
+  {
+    'Pocco81/auto-save.nvim',
+    lazy = false,
+    config = function()
+      require("auto-save").setup {
+      }
+    end,
+  },
   {
     'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
@@ -21,7 +28,7 @@ return {
       }
     end,
   },
-  {'kyazdani42/nvim-web-devicons'},
+  {'kyazdani42/nvim-web-devicons', lazy = true},
   {
     'kyazdani42/nvim-tree.lua',
     config = function()
@@ -38,7 +45,7 @@ return {
     config = function()
       require('bufferline').setup{
         options = {
-          offsets = {{filetype = "NvimTree", text = "File Explorer", highlight = "Directory", text_align = "left"}},
+          offsets = {{filetype = "NvimTree", text = "Tree", highlight = "Directory", text_align = "left"}},
           numbers = 'buffer_id',
           show_buffer_close_icons = false
         }
@@ -90,6 +97,6 @@ return {
   },
   {'maxmellon/vim-jsx-pretty'},
   {'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end},
-  {'dstein64/vim-startuptime'},
+  {'dstein64/vim-startuptime', lazy = true},
 }
 
