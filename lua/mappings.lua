@@ -1,3 +1,12 @@
+-- Copilot
+vim.api.nvim_set_keymap('n', '<leader>cp', '<ESC>:Copilot panel<CR>', {noremap = true})
+
+-- Gitsigns
+vim.api.nvim_set_keymap('n', '<leader>tb', '<ESC>:Gitsigns toggle_current_line_blame<CR>', {noremap = true})
+
+-- Re-indent file
+vim.api.nvim_set_keymap('n', '<leader>ri', '<ESC>ggVG=', {noremap = true})
+
 -- Copy contents of file to system clipboard
 vim.api.nvim_set_keymap('n', '<leader>fy', 'gg"+yG', {noremap = true})
 

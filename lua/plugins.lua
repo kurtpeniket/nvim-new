@@ -1,14 +1,19 @@
 return {
-  {'shaunsingh/nord.nvim', lazy = false, priority = 1000},
+  {'shaunsingh/nord.nvim', lazy = true, priority = 1000},
   {'tpope/vim-rails'},
   {'tpope/vim-fugitive'},
   {'tpope/vim-surround'},
   {'tpope/vim-repeat'},
   {'tpope/vim-commentary'},
   {'tpope/vim-abolish'},
+  {'tpope/vim-obsession'},
   {'kana/vim-textobj-user', lazy = false, priority = 900},
   {'nelstrom/vim-textobj-rubyblock', lazy = false},
-  {'tmsvg/pear-tree'},
+  {
+    'windwp/nvim-autopairs',
+    event = "InsertEnter",
+    opts = {} -- this is equalent to setup({}) function
+  },
   {'nvim-lua/plenary.nvim'},
   {
     'Pocco81/auto-save.nvim',
@@ -84,12 +89,12 @@ return {
       require('lualine').setup{
         options = { theme = 'nord' },
         sections = {
-            lualine_a = {'mode'},
-            lualine_b = {'branch', 'diff', 'diagnostics'},
-            lualine_c = { {'filename', path = 1} },
-            lualine_x = {'fileformat', 'filetype'},
-            lualine_y = {'progress'},
-            lualine_z = {'location'}
+          lualine_a = {'mode'},
+          lualine_b = {'branch', 'diff', 'diagnostics'},
+          lualine_c = { {'filename', path = 1} },
+          lualine_x = {'fileformat', 'filetype'},
+          lualine_y = {'progress'},
+          lualine_z = {'location'}
         },
         disabled_filetypes = { 'Plug', 'NVimTree' }
       }
@@ -98,5 +103,39 @@ return {
   {'maxmellon/vim-jsx-pretty'},
   {'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end},
   {'dstein64/vim-startuptime', lazy = true},
+  {
+    'github/copilot.vim',
+    lazy = true, 
+    cmd = "Copilot",
+    config = function()
+      require('copilot').setup() 
+    end,
+  },
+  {
+    'lewis6991/gitsigns.nvim',
+    lazy = false, 
+    config = function()
+      require('gitsigns').setup() 
+    end,
+  },
+
+  -- {
+  --   'zbirenbaum/copilot.lua',
+  --   lazy = true,
+  --   cmd = "Copilot",
+  --   event = "InsertEnter",
+  --   config = function()
+  --     require("copilot").setup({
+  --       suggestion = {
+  --         auto_trigger = true,
+  --         keymap = {
+  --           accept = "<Tab>",
+  --           next = "<M-]>",
+  --           prev = "<M-[>",
+  --           dismiss = "<C-]>",         }
+  --       }
+  --     })
+  --   end,
+  -- },
 }
 
