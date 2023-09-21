@@ -12,7 +12,7 @@ return {
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
-    opts = {} -- this is equalent to setup({}) function
+    opts = {} -- this is equivalent to setup({}) function
   },
   {'nvim-lua/plenary.nvim'},
   {
@@ -25,10 +25,11 @@ return {
   },
   {
     'nvim-treesitter/nvim-treesitter',
+    lazy = false,
     run = ':TSUpdate',
     config = function()
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { "ruby", "javascript", "python", "html", "css" },
+        ensure_installed = { "ruby", "javascript", "python", "html", "css", "c" },
         auto_install = true
       }
     end,
@@ -104,21 +105,20 @@ return {
   {'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end},
   {'dstein64/vim-startuptime', lazy = true},
   {
-    'github/copilot.vim',
-    lazy = true, 
-    cmd = "Copilot",
-    config = function()
-      require('copilot').setup() 
-    end,
-  },
-  {
     'lewis6991/gitsigns.nvim',
     lazy = false, 
     config = function()
       require('gitsigns').setup() 
     end,
   },
-
+  {'Exafunction/codeium.vim'},
+  -- {
+  --   'github/copilot.vim',
+  --   cmd = "Copilot",
+  --   config = function()
+  --     require('copilot').setup() 
+  --   end,
+  -- },
   -- {
   --   'zbirenbaum/copilot.lua',
   --   lazy = true,
