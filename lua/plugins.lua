@@ -58,7 +58,7 @@ return {
       }
     end,
   },
-  {'nvim-telescope/telescope.nvim', tag = '0.1.0'},
+  {'nvim-telescope/telescope.nvim'},
   {
     'nvim-telescope/telescope-fzy-native.nvim',
     config = function()
