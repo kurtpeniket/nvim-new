@@ -17,6 +17,16 @@ vim.api.nvim_set_keymap('n', '<C-L>', ':bnext<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-H>', ':bprev<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>b', ':ls<CR>:b<Space>', {noremap = true})
 
+-- Terminal
+vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', {noremap = true}) -- Escape :term
+-- no spell in terminal
+vim.api.nvim_create_autocmd({"TermOpen"}, {
+  command = "setlocal nospell",
+  pattern = "*",
+})
+-- open in split
+vim.api.nvim_set_keymap('n', '<leader>tt', '<ESC>:vsplit term://zsh<CR>', {noremap = true})
+
 -- Close all buffers except current
 vim.cmd([[command! BufOnly silent! execute "%bd|e#|bd#"]])
 vim.api.nvim_set_keymap('n', '<leader>o', ':BufOnly<CR>', {noremap = true})

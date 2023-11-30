@@ -29,7 +29,7 @@ return {
     run = ':TSUpdate',
     config = function()
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { "ruby", "javascript", "python", "html", "css", "c" },
+        ensure_installed = { "ruby", "javascript", "python", "html", "css", "c", "svelte", "tsx" },
         auto_install = true
       }
     end,
