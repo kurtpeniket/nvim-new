@@ -1,8 +1,11 @@
 -- Copilot
-vim.api.nvim_set_keymap('n', '<leader>cp', '<ESC>:Copilot panel<CR>', {noremap = true})
+-- vim.api.nvim_set_keymap('n', '<leader>cp', '<ESC>:Copilot panel<CR>', {noremap = true})
 
 -- Gitsigns
 vim.api.nvim_set_keymap('n', '<leader>tb', '<ESC>:Gitsigns toggle_current_line_blame<CR>', {noremap = true})
+
+-- Vertical cursor column line
+vim.api.nvim_set_keymap('n', '<leader>\\', '<ESC>:set cursorcolumn!<CR>', {noremap = true})
 
 -- Re-indent file
 vim.api.nvim_set_keymap('n', '<leader>ri', '<ESC>ggVG=', {noremap = true})
@@ -74,6 +77,9 @@ vim.api.nvim_set_keymap('n', '<leader>4', '<ESC>a${}<ESC>i', {noremap = true})
 
 -- map(&:)
 vim.api.nvim_set_keymap('n', '<leader>&', '<ESC>A.map(&:)<ESC>$i', {noremap = true})
+
+-- columns
+vim.api.nvim_set_keymap('n', '<leader>cd', '<ESC>0A<div class="columns"><ESC>o<div class="column"><ESC>o</div><ESC>o</div><ESC>V3k=', {noremap = true})
 
 -- Inline class/style
 vim.api.nvim_set_keymap('n', '<leader>as', '<ESC>a class=""<ESC>i', {noremap = true})

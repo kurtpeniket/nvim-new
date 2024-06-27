@@ -1,13 +1,27 @@
 return {
-  {'shaunsingh/nord.nvim', lazy = true, priority = 1000},
+  {
+    'shaunsingh/nord.nvim',
+    lazy = true,
+    event = 'ColorScheme',
+    priority = 1000,
+  },
+  -- {
+  --   'navarasu/onedark.nvim',
+  --   lazy = true,
+  --   priority = 1000,
+  -- },
   {'tpope/vim-rails'},
   {'tpope/vim-fugitive'},
   {'tpope/vim-surround'},
   {'tpope/vim-repeat'},
   {'tpope/vim-commentary'},
-  {'tpope/vim-abolish'},
-  {'tpope/vim-obsession'},
-  {'kana/vim-textobj-user', lazy = false, priority = 900},
+  -- {'tpope/vim-abolish'},
+  -- {'tpope/vim-obsession'},
+  {
+    'kana/vim-textobj-user',
+    lazy = false,
+    priority = 900,
+  },
   {'nelstrom/vim-textobj-rubyblock', lazy = false},
   {
     'windwp/nvim-autopairs',
@@ -37,6 +51,8 @@ return {
   {'kyazdani42/nvim-web-devicons', lazy = true},
   {
     'kyazdani42/nvim-tree.lua',
+    lazy = true,
+    cmd = 'NvimTreeToggle',
     config = function()
       require('nvim-tree').setup {
         update_focused_file = { enable = true },
@@ -76,14 +92,16 @@ return {
   },
   {'neovim/nvim-lspconfig'},
   {'rafamadriz/friendly-snippets'},
-  {'hrsh7th/cmp-nvim-lsp'},
-  {'hrsh7th/cmp-buffer'},
-  {'hrsh7th/cmp-path'},
-  {'hrsh7th/cmp-cmdline'},
-  {'hrsh7th/nvim-cmp'},
-  {'hrsh7th/cmp-vsnip'},
-  {'hrsh7th/vim-vsnip'},
-  {'hrsh7th/vim-vsnip-integ'},
+  -- TEST
+  -- {'hrsh7th/cmp-nvim-lsp'},
+  -- {'hrsh7th/cmp-buffer'},
+  -- {'hrsh7th/cmp-path'},
+  -- {'hrsh7th/cmp-cmdline'},
+  -- {'hrsh7th/nvim-cmp'},
+  -- {'hrsh7th/cmp-vsnip'},
+  -- {'hrsh7th/vim-vsnip'},
+  -- {'hrsh7th/vim-vsnip-integ'},
+  -- TEST
   {
     'nvim-lualine/lualine.nvim',
     config = function()
@@ -101,7 +119,7 @@ return {
       }
     end,
   },
-  {'maxmellon/vim-jsx-pretty'},
+  -- {'maxmellon/vim-jsx-pretty'},
   {'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end},
   {'dstein64/vim-startuptime', lazy = true},
   {
@@ -111,10 +129,17 @@ return {
       require('gitsigns').setup() 
     end,
   },
-  {'Exafunction/codeium.vim'},
+  {
+    'Exafunction/codeium.vim',
+     commit = "289eb724e5d6fab2263e94a1ad6e54afebefafb2",
+     event = 'BufEnter'
+  },
+  -- {'Andrewradev/splitjoin.vim'},
+  -- {'AndrewRadev/tagalong.vim'},
   -- {
   --   'github/copilot.vim',
   --   cmd = "Copilot",
+  --   event = "InsertEnter",
   --   config = function()
   --     require('copilot').setup() 
   --   end,
