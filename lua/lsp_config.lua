@@ -7,11 +7,14 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 -- vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
-    signs = {
-      severity_limit = "Warning",
-    },
+    underline = false,
+    signs = true,
+    -- signs = {
+    --   severity_limit = "Warning",
+    -- },
     virtual_text = {
       severity_limit = "Warning",
+      spacing = 4,
     },
   }
 )
@@ -55,7 +58,7 @@ require('lspconfig')['rome'].setup{
     on_attach = on_attach,
     flags = lsp_flags,
 }
-require('lspconfig')['tsserver'].setup{
+require('lspconfig')['ts_ls'].setup{
     on_attach = on_attach,
     flags = lsp_flags,
 }

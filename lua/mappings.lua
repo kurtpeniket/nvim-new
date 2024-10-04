@@ -1,4 +1,5 @@
 -- Copilot
+
 -- vim.api.nvim_set_keymap('n', '<leader>cp', '<ESC>:Copilot panel<CR>', {noremap = true})
 
 -- Gitsigns
@@ -18,7 +19,9 @@ vim.api.nvim_set_keymap('n', '<leader>x', ':bd<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>vs', ':vspl #<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-L>', ':bnext<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<C-H>', ':bprev<CR>', {noremap = true})
-vim.api.nvim_set_keymap('n', '<leader>b', ':ls<CR>:b<Space>', {noremap = true})
+
+-- Git
+vim.api.nvim_set_keymap('n', '<leader>b', ':G blame<CR>', {noremap = true})
 
 -- Terminal
 vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', {noremap = true}) -- Escape :term
@@ -77,6 +80,9 @@ vim.api.nvim_set_keymap('n', '<leader>4', '<ESC>a${}<ESC>i', {noremap = true})
 
 -- map(&:)
 vim.api.nvim_set_keymap('n', '<leader>&', '<ESC>A.map(&:)<ESC>$i', {noremap = true})
+
+-- if/else
+vim.api.nvim_set_keymap('n', '<leader>if', '<ESC>oif<ESC>oelse<ESC>oend<ESC>V2k=', {noremap = true})
 
 -- columns
 vim.api.nvim_set_keymap('n', '<leader>cd', '<ESC>0A<div class="columns"><ESC>o<div class="column"><ESC>o</div><ESC>o</div><ESC>V3k=', {noremap = true})

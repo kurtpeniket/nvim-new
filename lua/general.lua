@@ -30,6 +30,10 @@ vim.o.splitbelow = true
 vim.o.splitright = true
 vim.g.ackprg = 'ag --nogroup --nocolor --column'
 
+-- Disable netrw
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- Setup vsnip filetypes
 -- Don't think I use this?
 --
