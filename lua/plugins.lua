@@ -1,16 +1,5 @@
 return {
   {
-      'MeanderingProgrammer/render-markdown.nvim',
-      opts = {},
-      dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-      config = function()
-        require('render-markdown').setup({
-          sign = { enabled = false },
-        })
-      end,
-  },
-
-  {
     'shaunsingh/nord.nvim',
     lazy = false,
     event = 'ColorScheme',
@@ -19,38 +8,6 @@ return {
       vim.g.nord_italic = false
     end
   },
-
-  -- {
-  --   'sainnhe/edge',
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     vim.g.edge_enable_italic = true
-  --     vim.cmd.colorscheme('edge')
-  --   end
-  -- },
-
-  -- {
-  --   'sainnhe/sonokai',
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     -- Optionally configure and load the colorscheme
-  --     -- directly inside the plugin declaration.
-  --     vim.g.sonokai_enable_italic = true
-  --     vim.cmd.colorscheme('sonokai')
-  --   end
-  -- },
-
-  -- {
-  --   'navarasu/onedark.nvim',
-  --   lazy = false,
-  --   priority = 1000,
-  --   config = function()
-  --     vim.g.onedark_config = { style = 'warm' }
-  --     vim.cmd.colorscheme('onedark')
-  --   end
-  -- },
 
   {'tpope/vim-rails'},
   {'tpope/vim-fugitive'},
@@ -64,13 +21,17 @@ return {
     lazy = false,
     priority = 900,
   },
+
   {'nelstrom/vim-textobj-rubyblock', lazy = false},
+
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
     opts = {} -- this is equivalent to setup({}) function
   },
+
   {'nvim-lua/plenary.nvim'},
+
   {
     'Pocco81/auto-save.nvim',
     lazy = false,
@@ -90,9 +51,11 @@ return {
       }
     end,
   },
-  {
+
+  -- {
     'nvim-tree/nvim-web-devicons',
-  },
+  -- },
+
   {
     'kyazdani42/nvim-tree.lua',
     lazy = true,
@@ -107,6 +70,7 @@ return {
       }
     end,
   },
+
   {
     'akinsho/bufferline.nvim',
     config = function()
@@ -119,7 +83,9 @@ return {
       }
     end,
   },
+
   {'nvim-telescope/telescope.nvim'},
+
   {
     'nvim-telescope/telescope-fzy-native.nvim',
     config = function()
@@ -135,8 +101,85 @@ return {
       require('telescope').load_extension('fzy_native')
     end,
   },
-  {'neovim/nvim-lspconfig'},
-  {'rafamadriz/friendly-snippets'},
+
+  -- LSP stuff
+  {
+    "hrsh7th/cmp-nvim-lsp"
+  },
+  {
+    "L3MON4D3/LuaSnip",
+    dependencies = {
+      "saadparwaiz1/cmp_luasnip",
+      "rafamadriz/friendly-snippets",
+    },
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    config = function()
+      local cmp = require("cmp")
+      require("luasnip.loaders.from_vscode").lazy_load()
+
+      cmp.setup({
+        snippet = {
+          expand = function(args)
+            require("luasnip").lsp_expand(args.body)
+          end,
+        },
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
+        },
+        mapping = cmp.mapping.preset.insert({
+          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+          ["<C-f>"] = cmp.mapping.scroll_docs(4),
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-e>"] = cmp.mapping.abort(),
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+        }),
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "luasnip" }, -- For luasnip users.
+        }, {
+          { name = "buffer" },
+        }),
+      })
+    end,
+  },
+  {
+    "williamboman/mason.nvim",
+    lazy = false,
+    config = function()
+      require("mason").setup()
+    end,
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    lazy = false,
+    opts = {
+      auto_install = true,
+    },
+  },
+  {
+    "neovim/nvim-lspconfig",
+    lazy = false,
+    config = function()
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+      local lspconfig = require("lspconfig")
+      lspconfig.ruby_lsp.setup({
+        capabilities = capabilities
+      })
+
+      vim.keymap.set("n", "<leader>gh", vim.lsp.buf.hover, {})
+      vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
+      vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
+      vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
+      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {})
+    end,
+  },
+  -- 
+
   {
     'nvim-lualine/lualine.nvim',
     config = function()
@@ -156,7 +199,9 @@ return {
   },
 
   {'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end},
+
   {'dstein64/vim-startuptime', lazy = true},
+
   {
     'lewis6991/gitsigns.nvim',
     lazy = false, 
