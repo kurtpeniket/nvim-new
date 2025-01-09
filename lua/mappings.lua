@@ -116,3 +116,21 @@ vim.api.nvim_set_keymap('n', '<leader>fg', "<cmd>lua require('telescope.builtin'
 vim.api.nvim_set_keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>fs', "<cmd>lua require('telescope.builtin').grep_string()<cr>", {noremap = true})
+
+-- Git Stuff (Fugitive)
+-- Git status
+vim.api.nvim_set_keymap('n', '<leader>gs', ':G<CR>', {noremap = true})
+-- Git add current file (like gaa but for single file)
+vim.api.nvim_set_keymap('n', '<leader>ga', ':Gwrite<CR>', {noremap = true})
+-- Git commit (opens commit window)
+vim.api.nvim_set_keymap('n', '<leader>gc', ':Git commit --message<CR>', {noremap = true})
+-- Git push (to current branch)
+vim.api.nvim_set_keymap('n', '<leader>gp', ':Git push<CR>', {noremap = true})
+-- Git pull
+vim.api.nvim_set_keymap('n', '<leader>gl', ':Git pull<CR>', {noremap = true})
+-- Git diff split (vertical)
+vim.api.nvim_set_keymap('n', '<leader>gd', ':Gvdiffsplit<CR>', {noremap = true})
+-- Git checkout
+vim.api.nvim_set_keymap('n', '<leader>gco', ':Git checkout ', {noremap = true})
+-- Git branch 
+vim.api.nvim_set_keymap('n', '<leader>gb', ':Git branch<CR>', {noremap = true})
