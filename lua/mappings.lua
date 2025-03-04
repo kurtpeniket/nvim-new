@@ -1,4 +1,31 @@
--- Copilot
+-- Copy whole file to system clipboard with metadata
+vim.api.nvim_create_user_command('CopyFileWithPath', function()
+    local filepath = vim.fn.expand('%:p')
+    local filetype = vim.bo.filetype
+    
+    -- Create a structured comment block
+    local metadata = string.format([[
+# FILE_METADATA_BEGIN
+# filepath: %s
+# filetype: %s
+# timestamp: %s
+# FILE_METADATA_END
+
+]], filepath, filetype, os.date("%Y-%m-%d %H:%M:%S"))
+    
+    local content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local full_content = metadata .. table.concat(content, '\n') .. '\n'
+    vim.fn.setreg('+', full_content)
+    
+    -- Add notification of successful copy
+    vim.notify(
+        string.format("Copied %s with metadata to clipboard", vim.fn.fnamemodify(filepath, ":t")),
+        vim.log.levels.INFO,
+        { title = "File Copied" }
+    )
+end, {})
+
+vim.api.nvim_set_keymap('n', '<leader>fy', ':CopyFileWithPath<CR>', { noremap = true, silent = true })
 
 -- vim.api.nvim_set_keymap('n', '<leader>cp', '<ESC>:Copilot panel<CR>', {noremap = true})
 
@@ -10,9 +37,6 @@ vim.api.nvim_set_keymap('n', '<leader>\\', '<ESC>:set cursorcolumn!<CR>', {norem
 
 -- Re-indent file
 vim.api.nvim_set_keymap('n', '<leader>ri', '<ESC>ggVG=', {noremap = true})
-
--- Copy contents of file to system clipboard
-vim.api.nvim_set_keymap('n', '<leader>fy', 'gg"+yG', {noremap = true})
 
 -- Buffer stuff
 vim.api.nvim_set_keymap('n', '<leader>x', ':bd<CR>', {noremap = true})
@@ -120,12 +144,12 @@ vim.api.nvim_set_keymap('n', '<leader>fs', "<cmd>lua require('telescope.builtin'
 -- Git Stuff (Fugitive)
 -- Git status
 vim.api.nvim_set_keymap('n', '<leader>gs', ':G<CR>', {noremap = true})
--- Git add current file (like gaa but for single file)
+
 vim.api.nvim_set_keymap('n', '<leader>ga', ':Gwrite<CR>', {noremap = true})
 -- Git commit (opens commit window)
-vim.api.nvim_set_keymap('n', '<leader>gc', ':Git commit --message<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>gc', ':Git commit<CR>', {noremap = true})
 -- Git push (to current branch)
-vim.api.nvim_set_keymap('n', '<leader>gp', ':Git push<CR>', {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>gp', ':Git push -u origin HEAD<CR>', {noremap = true})
 -- Git pull
 vim.api.nvim_set_keymap('n', '<leader>gl', ':Git pull<CR>', {noremap = true})
 -- Git diff split (vertical)
@@ -134,3 +158,7 @@ vim.api.nvim_set_keymap('n', '<leader>gd', ':Gvdiffsplit<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>gco', ':Git checkout ', {noremap = true})
 -- Git branch 
 vim.api.nvim_set_keymap('n', '<leader>gb', ':Git branch<CR>', {noremap = true})
+
+-- Ollama stuff
+vim.api.nvim_set_keymap('n', '<leader>]', ':Gen<CR>', { noremap = true })
+vim.api.nvim_set_keymap('v', '<leader>]', ':Gen<CR>', { noremap = true })
