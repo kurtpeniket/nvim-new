@@ -9,6 +9,7 @@ vim.cmd 'filetype on'
 vim.o.termguicolors = true
 vim.cmd 'colorscheme nord'
 -- vim.cmd('set colorcolumn=80')
+vim.g.have_nerd_font = true
 
 -- Misc
 vim.cmd('syntax sync minlines=256')

@@ -142,3 +142,9 @@ qb
 gsub
 bootcamp
 COVID
+def
+Textbox
+int
+initial
+section
+yml

@@ -144,12 +144,31 @@ vim.api.nvim_set_keymap('n', '<leader>fs', "<cmd>lua require('telescope.builtin'
 -- Git Stuff (Fugitive)
 -- Git status
 vim.api.nvim_set_keymap('n', '<leader>gs', ':G<CR>', {noremap = true})
-
-vim.api.nvim_set_keymap('n', '<leader>ga', ':Gwrite<CR>', {noremap = true})
--- Git commit (opens commit window)
-vim.api.nvim_set_keymap('n', '<leader>gc', ':Git commit<CR>', {noremap = true})
--- Git push (to current branch)
-vim.api.nvim_set_keymap('n', '<leader>gp', ':Git push -u origin HEAD<CR>', {noremap = true})
+-- Quick add+commit+push for current file
+vim.api.nvim_create_user_command('GitAddCommit', function()
+    -- Get the current file name for a better default message
+    local file_name = vim.fn.expand('%:t')
+    -- Default message includes the filename
+    local default_msg = "Update " .. file_name
+    -- Allow user to edit the message or accept default with Enter
+    local commit_message = vim.fn.input('Commit message: ', default_msg)
+    
+    if commit_message ~= '' then
+        vim.cmd('Gwrite')
+        vim.cmd('Git commit -m "' .. commit_message .. '"')
+        vim.notify('Committed: ' .. commit_message, vim.log.levels.INFO)
+        
+        -- Optionally, offer to push
+        local push = vim.fn.input('Push? (y/n): ')
+        if push:lower() == 'y' then
+            vim.cmd('Git push')
+            vim.notify('Pushed changes', vim.log.levels.INFO)
+        end
+    else
+        vim.notify('Commit aborted', vim.log.levels.WARN)
+    end
+end, {})
+vim.api.nvim_set_keymap('n', '<leader>gw', ':GitAddCommit<CR>', {noremap = true})
 -- Git pull
 vim.api.nvim_set_keymap('n', '<leader>gl', ':Git pull<CR>', {noremap = true})
 -- Git diff split (vertical)
