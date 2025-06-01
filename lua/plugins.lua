@@ -32,13 +32,18 @@ return {
 
   {'nvim-lua/plenary.nvim'},
 
-  {
-    'Pocco81/auto-save.nvim',
-    lazy = false,
-    config = function()
-      require("auto-save").setup {}
-    end,
-  },
+{
+  'Pocco81/auto-save.nvim',
+  lazy = false,
+  config = function()
+    require("auto-save").setup {
+      debounce_delay = 500, -- saves 500ms after changes stop
+      execution_message = {
+        message = function() return "" end, -- silent auto-save
+      },
+    }
+  end,
+},
 
   {
     'nvim-treesitter/nvim-treesitter',
@@ -90,23 +95,28 @@ return {
     end,
   },
 
-  {'nvim-telescope/telescope.nvim'},
-
-  {
-    'nvim-telescope/telescope-fzy-native.nvim',
-    config = function()
-      require('telescope').setup {
-        defaults = {
-          mappings = {
-            n = {
-              ['<C-q>'] = require('telescope.actions').send_selected_to_qflist + require('telescope.actions').open_qflist,
-            },
+{
+  'nvim-telescope/telescope.nvim',
+  config = function()
+    require('telescope').setup {
+      defaults = {
+        file_previewer = require('telescope.previewers').vim_buffer_cat.new,
+        grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
+        path_display = { "truncate" },
+        layout_config = {
+          horizontal = {
+            preview_width = 0.55,
           },
-        }
+        },
+        mappings = {
+          n = {
+            ['<C-q>'] = require('telescope.actions').send_selected_to_qflist + require('telescope.actions').open_qflist,
+          },
+        },
       }
-      require('telescope').load_extension('fzy_native')
-    end,
-  },
+    }
+  end,
+},
 
   -- LSP stuff
   {
@@ -222,55 +232,46 @@ return {
     event = 'BufEnter'
   },
 
-{
-  "yetone/avante.nvim",
-    config = function()
-      require('avante').setup()
-    end,
-  event = "VeryLazy",
-  version = false, -- Never set this value to "*"! Never!
-  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-  build = "make",
-  -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-  dependencies = {
-    "nvim-treesitter/nvim-treesitter",
-    "stevearc/dressing.nvim",
-    "nvim-lua/plenary.nvim",
-    "MunifTanjim/nui.nvim",
-    --- The below dependencies are optional,
-    "echasnovski/mini.pick", -- for file_selector provider mini.pick
-    "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-    "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-    "ibhagwan/fzf-lua", -- for file_selector provider fzf
-    "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-    "zbirenbaum/copilot.lua", -- for providers='copilot'
-    {
-      -- support for image pasting
-      "HakonHarnes/img-clip.nvim",
-      event = "VeryLazy",
-      opts = {
-        -- recommended settings
-        default = {
-          embed_image_as_base64 = false,
-          prompt_for_file_name = false,
-          drag_and_drop = {
-            insert_mode = true,
-          },
-          -- required for Windows users
-          use_absolute_path = true,
-        },
-      },
-    },
-    {
-      -- Make sure to set this up properly if you have lazy=true
-      'MeanderingProgrammer/render-markdown.nvim',
-      opts = {
-        file_types = { "markdown", "Avante" },
-      },
-      ft = { "markdown", "Avante" },
-    },
-  },
-}
+ -- {
+   -- "yetone/avante.nvim",
+     -- config = function()
+       -- require('avante').setup()
+     -- end,
+   -- event = "VeryLazy",
+   -- version = false, -- Never set this value to "*"! Never!
+   -- -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+   -- build = "make",
+   -- -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+   -- dependencies = {
+     -- "nvim-treesitter/nvim-treesitter",
+     -- "stevearc/dressing.nvim",
+     -- "nvim-lua/plenary.nvim",
+     -- "MunifTanjim/nui.nvim",
+     -- --- The below dependencies are optional,
+     -- "echasnovski/mini.pick", -- for file_selector provider mini.pick
+     -- "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+     -- "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+     -- "ibhagwan/fzf-lua", -- for file_selector provider fzf
+     -- "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+     -- "zbirenbaum/copilot.lua", -- for providers='copilot'
+     -- {
+       -- -- support for image pasting
+       -- "HakonHarnes/img-clip.nvim",
+       -- event = "VeryLazy",
+       -- opts = {
+         -- -- recommended settings
+         -- default = {
+           -- embed_image_as_base64 = false,
+           -- prompt_for_file_name = false,
+           -- drag_and_drop = {
+             -- insert_mode = true,
+           -- },
+           -- -- required for Windows users
+           -- use_absolute_path = true,
+         -- },
+       -- },
+     -- },
+  -- },
 
   -- {
   --   'nvim-telescope/telescope-ui-select.nvim',

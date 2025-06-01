@@ -1,31 +1,53 @@
--- Copy whole file to system clipboard with metadata
-vim.api.nvim_create_user_command('CopyFileWithPath', function()
+vim.api.nvim_create_user_command('CopyFileWithPathAndLineNumbers', function()
     local filepath = vim.fn.expand('%:p')
     local filetype = vim.bo.filetype
+    local filename = vim.fn.fnamemodify(filepath, ":t")
     
-    -- Create a structured comment block
     local metadata = string.format([[
-# FILE_METADATA_BEGIN
-# filepath: %s
-# filetype: %s
-# timestamp: %s
-# FILE_METADATA_END
-
-]], filepath, filetype, os.date("%Y-%m-%d %H:%M:%S"))
+<file_metadata>
+  <filepath>%s</filepath>
+  <filename>%s</filename>
+  <filetype>%s</filetype>
+  <timestamp>%s</timestamp>
+  <line_count>%d</line_count>
+</file_metadata>
+]], 
+    filepath, 
+    filename,
+    filetype, 
+    os.date("%Y-%m-%d %H:%M:%S"),
+    vim.api.nvim_buf_line_count(0)
+  )
     
+    -- Get file content with line numbers
     local content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    local full_content = metadata .. table.concat(content, '\n') .. '\n'
+    local numbered_content = {}
+    for i, line in ipairs(content) do
+        table.insert(numbered_content, string.format("%d: %s", i, line))
+    end
+    
+    local content_block = "<file_content>\n" .. table.concat(numbered_content, '\n') .. "\n</file_content>"
+    local full_content = metadata .. "\n" .. content_block .. "\n"
+    
     vim.fn.setreg('+', full_content)
     
-    -- Add notification of successful copy
     vim.notify(
-        string.format("Copied %s with metadata to clipboard", vim.fn.fnamemodify(filepath, ":t")),
+        string.format("Copied %s with line numbers to clipboard", filename),
         vim.log.levels.INFO,
-        { title = "File Copied" }
+        { 
+            title = "File Copied",
+            timeout = 3000,
+            icon = "📋"
+        }
     )
-end, {})
+end, { desc = "Copy current file with metadata and line numbers to system clipboard" })
 
-vim.api.nvim_set_keymap('n', '<leader>fy', ':CopyFileWithPath<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>fy', '<cmd>CopyFileWithPathAndLineNumbers<CR>', { noremap = true, silent = true })
+
+-- Find methods using LSP document symbols
+vim.api.nvim_set_keymap('n', '<leader>fm', 
+  "<cmd>lua require('telescope.builtin').lsp_document_symbols({symbols={'method', 'function'}})<CR>", 
+  {noremap = true, desc = "Find methods in current file"})
 
 -- vim.api.nvim_set_keymap('n', '<leader>cp', '<ESC>:Copilot panel<CR>', {noremap = true})
 
@@ -137,9 +159,19 @@ vim.api.nvim_set_keymap('n', '<leader>r', ':NvimTreeRefresh<CR>', {noremap = tru
 -- Telescope
 vim.api.nvim_set_keymap('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>", {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>", {noremap = true})
+-- Directory-specific live grep
+vim.api.nvim_set_keymap('n', '<leader>fd', "<cmd>lua require('telescope.builtin').live_grep({prompt_title='Search in Directory', cwd=vim.fn.input('Directory: ', '', 'dir')})<cr>", {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>fs', "<cmd>lua require('telescope.builtin').grep_string()<cr>", {noremap = true})
+-- Find Rails models
+vim.api.nvim_set_keymap('n', '<leader>rm', "<cmd>lua require('telescope.builtin').find_files({prompt_title='Rails Models', cwd='app/models'})<cr>", {noremap = true})
+-- Find Rails controllers
+vim.api.nvim_set_keymap('n', '<leader>rc', "<cmd>lua require('telescope.builtin').find_files({prompt_title='Rails Controllers', cwd='app/controllers'})<cr>", {noremap = true})
+-- Find Rails views
+vim.api.nvim_set_keymap('n', '<leader>rv', "<cmd>lua require('telescope.builtin').find_files({prompt_title='Rails Views', cwd='app/views'})<cr>", {noremap = true})
+-- Jump to recently used files
+vim.api.nvim_set_keymap('n', '<leader>fr', "<cmd>lua require('telescope.builtin').oldfiles()<cr>", {noremap = true})
 
 -- Git Stuff (Fugitive)
 -- Git status
@@ -177,6 +209,8 @@ vim.api.nvim_set_keymap('n', '<leader>gd', ':Gvdiffsplit<CR>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>gco', ':Git checkout ', {noremap = true})
 -- Git branch 
 vim.api.nvim_set_keymap('n', '<leader>gb', ':Git branch<CR>', {noremap = true})
+-- Open current file on GitHub at current line on master branch
+vim.api.nvim_set_keymap('n', '<leader>go', ':GBrowse master:%<CR>', {noremap = true})
 
 -- Ollama stuff
 vim.api.nvim_set_keymap('n', '<leader>]', ':Gen<CR>', { noremap = true })

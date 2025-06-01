@@ -19,3 +19,4 @@ require('lazy').setup('plugins')
 -- Other settings
 require('mappings')
 require('general')
+require('snippets')
