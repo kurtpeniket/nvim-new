@@ -212,6 +212,3 @@ vim.api.nvim_set_keymap('n', '<leader>gb', ':Git branch<CR>', {noremap = true})
 -- Open current file on GitHub at current line on master branch
 vim.api.nvim_set_keymap('n', '<leader>go', ':GBrowse master:%<CR>', {noremap = true})
 
--- Ollama stuff
-vim.api.nvim_set_keymap('n', '<leader>]', ':Gen<CR>', { noremap = true })
-vim.api.nvim_set_keymap('v', '<leader>]', ':Gen<CR>', { noremap = true })
