@@ -34,7 +34,7 @@ vim.api.nvim_create_user_command('CopyFileWithPathAndLineNumbers', function()
     vim.notify(
         string.format("Copied %s with line numbers to clipboard", filename),
         vim.log.levels.INFO,
-        { 
+        {
             title = "File Copied",
             timeout = 3000,
             icon = "📋"
@@ -43,6 +43,31 @@ vim.api.nvim_create_user_command('CopyFileWithPathAndLineNumbers', function()
 end, { desc = "Copy current file with metadata and line numbers to system clipboard" })
 
 vim.api.nvim_set_keymap('n', '<leader>fy', '<cmd>CopyFileWithPathAndLineNumbers<CR>', { noremap = true, silent = true })
+
+-- Claude transformation command
+vim.api.nvim_create_user_command('ClaudeTransform', function(opts)
+    local prompt = vim.fn.input('Prompt: ')
+
+    if prompt ~= '' then
+        -- Prepend instructions for clean output
+        local full_prompt = 'You are a code transformer, working on single blocks of text in a code editor. '
+                          .. 'Output ONLY the transformed code. No markdown, no explanation. '
+                          .. 'No backticks or formatting whatsoever. Task: '
+                          .. prompt
+
+        -- Execute the transformation on the range
+        vim.cmd(opts.line1 .. ',' .. opts.line2 .. '!claude -p ' .. vim.fn.shellescape(full_prompt))
+    else
+        vim.notify('Transformation cancelled', vim.log.levels.WARN)
+    end
+end, { range = true })
+
+-- Visual mode mapping for Claude transformation
+vim.api.nvim_set_keymap('v', '<leader>ce', ':ClaudeTransform<CR>', {
+    noremap = true,
+    silent = true,
+    desc = "Claude transform selection"
+})
 
 -- Find methods using LSP document symbols
 vim.api.nvim_set_keymap('n', '<leader>fm', 
@@ -212,3 +237,5 @@ vim.api.nvim_set_keymap('n', '<leader>gb', ':Git branch<CR>', {noremap = true})
 -- Open current file on GitHub at current line on master branch
 vim.api.nvim_set_keymap('n', '<leader>go', ':GBrowse master:%<CR>', {noremap = true})
 
+-- Hover diagnostics
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostic error" })

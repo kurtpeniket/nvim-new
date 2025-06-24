@@ -1,4 +1,7 @@
 return {
+  -- ================================================================================
+  -- COLORSCHEME
+  -- ================================================================================
   {
     'shaunsingh/nord.nvim',
     lazy = false,
@@ -9,41 +12,175 @@ return {
     end
   },
 
-  {'tpope/vim-rails'},
-  {'tpope/vim-fugitive'},
-  {'tpope/vim-surround'},
-  {'tpope/vim-repeat'},
-  {'tpope/vim-commentary'},
-  {'tpope/vim-rhubarb'},
+  -- ================================================================================
+  -- TPOPE ESSENTIALS
+  -- ================================================================================
+  { 'tpope/vim-rails' },
+  { 'tpope/vim-fugitive' },
+  { 'tpope/vim-surround' },
+  { 'tpope/vim-repeat' },
+  { 'tpope/vim-commentary' },
+  { 'tpope/vim-rhubarb' },
 
+  -- ================================================================================
+  -- TEXT OBJECTS & EDITING
+  -- ================================================================================
   {
     'kana/vim-textobj-user',
     lazy = false,
     priority = 900,
   },
 
-  {'nelstrom/vim-textobj-rubyblock', lazy = false},
+  { 'nelstrom/vim-textobj-rubyblock', lazy = false },
 
   {
     'windwp/nvim-autopairs',
     event = "InsertEnter",
-    opts = {} -- this is equivalent to setup({}) function
+    opts = {}
   },
 
-  {'nvim-lua/plenary.nvim'},
+  -- ================================================================================
+  -- FILE MANAGEMENT & NAVIGATION
+  -- ================================================================================
+  {
+    'kyazdani42/nvim-tree.lua',
+    cmd = 'NvimTreeToggle',
+    keys = {
+      { '<leader><TAB>', '<cmd>NvimTreeToggle<cr>', desc = 'Toggle file tree' },
+      { '<leader>r', '<cmd>NvimTreeRefresh<cr>', desc = 'Refresh file tree' },
+    },
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('nvim-tree').setup {
+        update_focused_file = { enable = true },
+        view = { width = 40, side = 'left' },
+        actions = { open_file = { quit_on_open = true } },
+        renderer = { indent_markers = { enable = true } }
+      }
+    end,
+  },
 
-{
-  'Pocco81/auto-save.nvim',
-  lazy = false,
-  config = function()
-    require("auto-save").setup {
-      debounce_delay = 500, -- saves 500ms after changes stop
-      execution_message = {
-        message = function() return "" end, -- silent auto-save
-      },
-    }
-  end,
-},
+  {
+    'nvim-telescope/telescope.nvim',
+    cmd = 'Telescope',
+    keys = {
+      { '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>", desc = "Find files" },
+      { '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>", desc = "Live grep" },
+      { '<leader>fd', "<cmd>lua require('telescope.builtin').live_grep({prompt_title='Search in Directory', cwd=vim.fn.input('Directory: ', '', 'dir')})<cr>", desc = "Grep in directory" },
+      { '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>", desc = "Find buffers" },
+      { '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>", desc = "Help tags" },
+      { '<leader>fs', "<cmd>lua require('telescope.builtin').grep_string()<cr>", desc = "Grep string" },
+      { '<leader>rm', "<cmd>lua require('telescope.builtin').find_files({prompt_title='Rails Models', cwd='app/models'})<cr>", desc = "Rails models" },
+      { '<leader>rc', "<cmd>lua require('telescope.builtin').find_files({prompt_title='Rails Controllers', cwd='app/controllers'})<cr>", desc = "Rails controllers" },
+      { '<leader>rv', "<cmd>lua require('telescope.builtin').find_files({prompt_title='Rails Views', cwd='app/views'})<cr>", desc = "Rails views" },
+      { '<leader>fr', "<cmd>lua require('telescope.builtin').oldfiles()<cr>", desc = "Recent files" },
+      { '<leader>fm', "<cmd>lua require('telescope.builtin').lsp_document_symbols({symbols={'method', 'function'}})<cr>", desc = "Find methods" },
+    },
+    config = function()
+      require('telescope').setup {
+        defaults = {
+          file_previewer = require('telescope.previewers').vim_buffer_cat.new,
+          grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
+          path_display = { "truncate" },
+          layout_config = {
+            horizontal = {
+              preview_width = 0.55,
+            },
+          },
+          mappings = {
+            n = {
+              ['<C-q>'] = require('telescope.actions').send_selected_to_qflist + require('telescope.actions').open_qflist,
+            },
+          },
+        }
+      }
+    end,
+  },
+
+  -- ================================================================================
+  -- UI & APPEARANCE
+  -- ================================================================================
+  {
+    'nvim-tree/nvim-web-devicons',
+    config = function()
+      require('nvim-web-devicons').setup {
+        default = true
+      }
+    end,
+  },
+
+  -- {
+  --   'akinsho/bufferline.nvim',
+  --   event = 'VeryLazy',
+  --   config = function()
+  --     require('bufferline').setup {
+  --       options = {
+  --         offsets = { { filetype = "NvimTree", text = "Tree", highlight = "Directory", text_align = "left" } },
+  --         numbers = 'buffer_id',
+  --         show_buffer_close_icons = false
+  --       }
+  --     }
+  --   end,
+  -- },
+
+  {
+    'nvim-lualine/lualine.nvim',
+    event = 'VeryLazy',
+    config = function()
+      require('lualine').setup {
+        options = { 
+          theme = 'auto',
+          section_separators = { left = '', right = '' },
+          component_separators = { left = '|', right = '|' }
+        },
+        sections = {
+          lualine_a = { 'mode' },
+          lualine_b = { 'branch', 'diff' },
+          lualine_c = {
+            {
+              'buffers',
+              use_mode_colors = true,
+              symbols = {
+                modified = ' ●',      -- Text to show when the buffer is modified
+                alternate_file = '#', -- Text to show to identify the alternate file
+                directory =  '',     -- Text to show when the buffer is a directory
+              },
+            }
+          },
+          lualine_x = { 'filetype' },
+          lualine_y = { { 'filename', path = 1 } },
+          lualine_z = { 'location' }
+        },
+        disabled_filetypes = { 'Plug', 'NVimTree' }
+      }
+    end,
+  },
+
+  -- ================================================================================
+  -- DEVELOPMENT TOOLS
+  -- ================================================================================
+  {
+    'Pocco81/auto-save.nvim',
+    event = { 'InsertLeave', 'TextChanged' },
+    config = function()
+      require("auto-save").setup {
+        debounce_delay = 1000,
+        execution_message = {
+          message = function() return "" end,
+        },
+        condition = function(buf)
+          local filename = vim.fn.bufname(buf)
+
+          -- Don't auto-save nvim config files
+          if string.match(filename, "%.config/nvim/") then
+            return false
+          end
+
+          return true
+        end,
+      }
+    end,
+  },
 
   {
     'nvim-treesitter/nvim-treesitter',
@@ -57,71 +194,64 @@ return {
     end,
   },
 
-{
-  'nvim-tree/nvim-web-devicons',
-  config = function()
-    require('nvim-web-devicons').setup {
-      -- Forces all icons to be loaded at startup
-      default = true
-    }
-  end,
-},
-
   {
-    'kyazdani42/nvim-tree.lua',
-    lazy = true,
-    cmd = 'NvimTreeToggle',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    'lewis6991/gitsigns.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
     config = function()
-      require('nvim-tree').setup {
-        update_focused_file = { enable = true },
-        view = { width = 40, side = 'left' },
-        actions = { open_file = { quit_on_open = true } },
-        renderer = { indent_markers = { enable = true } }
-      }
+      require('gitsigns').setup()
     end,
   },
 
   {
-    'akinsho/bufferline.nvim',
+    'norcalli/nvim-colorizer.lua',
     config = function()
-      require('bufferline').setup{
-        options = {
-          offsets = {{filetype = "NvimTree", text = "Tree", highlight = "Directory", text_align = "left"}},
-          numbers = 'buffer_id',
-          show_buffer_close_icons = false
-        }
-      }
+      require('colorizer').setup()
+    end
+  },
+
+  -- ================================================================================
+  -- LSP & COMPLETION
+  -- ================================================================================
+  {
+    "williamboman/mason.nvim",
+    lazy = false,
+    config = function()
+      require("mason").setup()
     end,
   },
 
-{
-  'nvim-telescope/telescope.nvim',
-  config = function()
-    require('telescope').setup {
-      defaults = {
-        file_previewer = require('telescope.previewers').vim_buffer_cat.new,
-        grep_previewer = require('telescope.previewers').vim_buffer_vimgrep.new,
-        path_display = { "truncate" },
-        layout_config = {
-          horizontal = {
-            preview_width = 0.55,
-          },
-        },
-        mappings = {
-          n = {
-            ['<C-q>'] = require('telescope.actions').send_selected_to_qflist + require('telescope.actions').open_qflist,
-          },
-        },
-      }
-    }
-  end,
-},
-
-  -- LSP stuff
   {
-    "hrsh7th/cmp-nvim-lsp"
+    "williamboman/mason-lspconfig.nvim",
+    lazy = false,
+    opts = {
+      auto_install = true,
+    },
   },
+
+  {
+    "neovim/nvim-lspconfig",
+    lazy = false,
+    config = function()
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+      local lspconfig = require("lspconfig")
+      lspconfig.ruby_lsp.setup({
+        capabilities = capabilities,
+        filetypes = { "ruby", "erb" }
+      })
+
+      -- LSP keymaps
+      vim.keymap.set("n", "<leader>gh", vim.lsp.buf.hover, {})
+      vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
+      vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
+      vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
+      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {})
+    end,
+  },
+
+  { "hrsh7th/cmp-nvim-lsp" },
+
   {
     "L3MON4D3/LuaSnip",
     dependencies = {
@@ -129,6 +259,7 @@ return {
       "rafamadriz/friendly-snippets",
     },
   },
+
   {
     "hrsh7th/nvim-cmp",
     config = function()
@@ -154,151 +285,24 @@ return {
         }),
         sources = cmp.config.sources({
           { name = "nvim_lsp" },
-          { name = "luasnip" }, -- For luasnip users.
+          { name = "luasnip" },
         }, {
           { name = "buffer" },
         }),
       })
     end,
   },
-  {
-    "williamboman/mason.nvim",
-    lazy = false,
-    config = function()
-      require("mason").setup()
-    end,
-  },
-  {
-    "williamboman/mason-lspconfig.nvim",
-    lazy = false,
-    opts = {
-      auto_install = true,
-    },
-  },
-  {
-    "neovim/nvim-lspconfig",
-    lazy = false,
-    config = function()
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-      local lspconfig = require("lspconfig")
-      lspconfig.ruby_lsp.setup({
-        capabilities = capabilities,
-        filetypes = { "ruby", "erb" }
-      })
-
-      vim.keymap.set("n", "<leader>gh", vim.lsp.buf.hover, {})
-      vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
-      vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
-      vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
-      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {})
-    end,
-  },
-  -- 
-
-  {
-    'nvim-lualine/lualine.nvim',
-    config = function()
-      require('lualine').setup{
-        options = { theme = 'nord' },
-        sections = {
-          lualine_a = {'mode'},
-          lualine_b = {'branch', 'diff', 'diagnostics'},
-          lualine_c = { {'filename', path = 1} },
-          lualine_x = {'fileformat', 'filetype'},
-          lualine_y = {'progress'},
-          lualine_z = {'location'}
-        },
-        disabled_filetypes = { 'Plug', 'NVimTree' }
-      }
-    end,
-  },
-
-  {'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end},
-
-  {'dstein64/vim-startuptime', lazy = true},
-
-  {
-    'lewis6991/gitsigns.nvim',
-    lazy = false, 
-    config = function()
-      require('gitsigns').setup() 
-    end,
-  },
-
+  -- ================================================================================
+  -- AI & CODE ASSISTANCE
+  -- ================================================================================
   {
     'Exafunction/codeium.vim',
     event = 'BufEnter'
   },
 
- -- {
-   -- "yetone/avante.nvim",
-     -- config = function()
-       -- require('avante').setup()
-     -- end,
-   -- event = "VeryLazy",
-   -- version = false, -- Never set this value to "*"! Never!
-   -- -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-   -- build = "make",
-   -- -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-   -- dependencies = {
-     -- "nvim-treesitter/nvim-treesitter",
-     -- "stevearc/dressing.nvim",
-     -- "nvim-lua/plenary.nvim",
-     -- "MunifTanjim/nui.nvim",
-     -- --- The below dependencies are optional,
-     -- "echasnovski/mini.pick", -- for file_selector provider mini.pick
-     -- "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-     -- "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-     -- "ibhagwan/fzf-lua", -- for file_selector provider fzf
-     -- "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-     -- "zbirenbaum/copilot.lua", -- for providers='copilot'
-     -- {
-       -- -- support for image pasting
-       -- "HakonHarnes/img-clip.nvim",
-       -- event = "VeryLazy",
-       -- opts = {
-         -- -- recommended settings
-         -- default = {
-           -- embed_image_as_base64 = false,
-           -- prompt_for_file_name = false,
-           -- drag_and_drop = {
-             -- insert_mode = true,
-           -- },
-           -- -- required for Windows users
-           -- use_absolute_path = true,
-         -- },
-       -- },
-     -- },
-  -- },
-
-  -- {
-  --   'nvim-telescope/telescope-ui-select.nvim',
-  --   config = function()
-  --     require('telescope').setup {
-  --       extensions = {
-  --         ['ui-select'] = {
-  --           require('telescope.themes').get_dropdown {}
-  --         }
-  --       }
-  --     }
-  --     require('telescope').load_extension('ui-select')
-  --   end,
-  --   dependencies = { 'nvim-telescope/telescope.nvim' }
-  -- },
-
-  -- {
-  --   "David-Kunz/gen.nvim",
-  --   opts = {
-  --     model = "llama3.1:latest",
-  --     prompts = require('custom_prompts')
-  --   }
-  -- },
-
-  -- {
-  --   'github/copilot.vim',
-  --   lazy = false
-  -- },
+  -- ================================================================================
+  -- DEPENDENCIES
+  -- ================================================================================
+  { 'nvim-lua/plenary.nvim' },
 }
-
